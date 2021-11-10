@@ -25,14 +25,14 @@ class JuiceboxFileCase extends JuiceboxCaseTestBase {
    *
    * @var string
    */
-  protected $instFieldName = 'field_file';
+  protected string $instFieldName = 'field_file';
 
   /**
    * The field type.
    *
    * @var string
    */
-  public $instFieldType = 'file';
+  public string $instFieldType = 'file';
 
   /**
    * {@inheritdoc}

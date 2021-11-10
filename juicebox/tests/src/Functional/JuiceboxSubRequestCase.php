@@ -67,14 +67,14 @@ class JuiceboxSubRequestCase extends JuiceboxCaseTestBase {
    *
    * @var string
    */
-  protected $instBundle = 'article';
+  protected string $instBundle = 'article';
 
   /**
    * Field name.
    *
    * @var string
    */
-  protected $instFieldName = 'field_image';
+  protected string $instFieldName = 'field_image';
   // Uncomment the line below, and remove juicebox_mimic_article from the module
   // list above, to use the "standard" profile's article type for this test
   // instead of the one we create manually (should also work, but will be slow).

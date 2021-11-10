@@ -3,6 +3,7 @@
 namespace Drupal\juicebox;
 
 use Drupal\Core\Messenger\MessengerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -68,7 +69,7 @@ class JuiceboxFormatter implements JuiceboxFormatterInterface, TrustedCallbackIn
   /**
    * The messenger service.
    *
-   * @var \Drupal\Core\Messenger\MessengerInterface
+   * @var MessengerInterface
    */
   protected $messenger;
 
@@ -95,7 +96,7 @@ class JuiceboxFormatter implements JuiceboxFormatterInterface, TrustedCallbackIn
    *   A current path service.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The Symfony request stack from which to extract the current request.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger_interface
+   * @param MessengerInterface $messenger_interface
    *   The messenger interface.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager service.
@@ -121,7 +122,7 @@ class JuiceboxFormatter implements JuiceboxFormatterInterface, TrustedCallbackIn
   /**
    * {@inheritdoc}
    */
-  public static function trustedCallbacks() {
+  public static function trustedCallbacks(): array {
     return [
       'preRenderFieldsets',
     ];
@@ -138,7 +139,7 @@ class JuiceboxFormatter implements JuiceboxFormatterInterface, TrustedCallbackIn
    * @param array $form
    *   The form that gets returned.
    */
-  public static function preRenderFieldsets(array $form) {
+  public static function preRenderFieldsets(array $form): array {
     foreach (Element::children($form) as $key) {
       $element = $form[$key];
       // In our form builder functions, we added an arbitrary #jb_fieldset
@@ -181,7 +182,7 @@ class JuiceboxFormatter implements JuiceboxFormatterInterface, TrustedCallbackIn
     if ($gallery instanceof JuiceboxGalleryInterface) {
       return $gallery;
     }
-    throw new \Exception('Could not instantiate Juicebox gallery.');
+    throw new Exception('Could not instantiate Juicebox gallery.');
   }
 
   /**
@@ -194,7 +195,7 @@ class JuiceboxFormatter implements JuiceboxFormatterInterface, TrustedCallbackIn
   /**
    * {@inheritdoc}
    */
-  public function getLibrary($force_local = FALSE, $reset = FALSE) {
+  public function getLibrary($force_local = FALSE, $reset = FALSE): array {
     $library = &self::$library;
     if (!$library || $reset) {
       // We "default" to sites/all/libraries and that will override
@@ -242,7 +243,7 @@ class JuiceboxFormatter implements JuiceboxFormatterInterface, TrustedCallbackIn
   /**
    * {@inheritdoc}
    */
-  public function buildEmbed(JuiceboxGalleryInterface $gallery, array $settings, array $xml_route_info, $add_js = TRUE, $add_xml = FALSE, array $contextual = []) {
+  public function buildEmbed(JuiceboxGalleryInterface $gallery, array $settings, array $xml_route_info, $add_js = TRUE, $add_xml = FALSE, array $contextual = []): array {
     // Merge all settings.
     $settings = $settings + $this->getGlobalSettings();
     // Set some defaults for the route info.
@@ -313,9 +314,8 @@ class JuiceboxFormatter implements JuiceboxFormatterInterface, TrustedCallbackIn
   /**
    * {@inheritdoc}
    */
-  public function styleImageSrcData(FileInterface $image_file, $image_style, FileInterface $thumb_file, $thumb_style, array $settings) {
+  public function styleImageSrcData(FileInterface $image_file, $image_style, FileInterface $thumb_file, $thumb_style, array $settings): array {
     $check_incompatible = (!empty($settings['incompatible_file_action']));
-    $src_data = [];
     // Style the main item.
     $src_data = $this->styleImage($image_file, $image_style, $check_incompatible);
     // Set thumb data and add it to the source info.
@@ -342,7 +342,7 @@ class JuiceboxFormatter implements JuiceboxFormatterInterface, TrustedCallbackIn
    *
    * This method can detect if the passed file is incompatible with Juicebox.
    * If so it styles the output as a mimetype image icon representing the file
-   * type. Otherwise the item is styled normally with the passed image style.
+   * type. Otherwise, the item is styled normally with the passed image style.
    *
    * @param \Drupal\file\FileInterface $file
    *   A file entity containing the image data to append Juicebox styled image
@@ -356,7 +356,7 @@ class JuiceboxFormatter implements JuiceboxFormatterInterface, TrustedCallbackIn
    * @return array
    *   The styled image data.
    */
-  protected function styleImage(FileInterface $file, $style, $check_compatible = TRUE) {
+  protected function styleImage(FileInterface $file, string $style, bool $check_compatible = TRUE): array {
     $global_settings = $this->getGlobalSettings();
     $library = $this->getLibrary();
     $mimetype = $file->getMimeType();
@@ -365,7 +365,7 @@ class JuiceboxFormatter implements JuiceboxFormatterInterface, TrustedCallbackIn
     // Set the normal, unstyled, url for reference.
     $image_data['unstyled_src'] = file_create_url($file->getFileUri());
     // Check compatibility if configured and if the library info contains
-    // mimetype compatibitly information.
+    // mimetype compatibility information.
     if ($check_compatible && !empty($library['compatible_mimetypes']) && !in_array($mimetype, $library['compatible_mimetypes'])) {
       // If the item is not compatible, find the substitute mimetype icon.
       $image_data['juicebox_compatible'] = FALSE;
@@ -419,7 +419,7 @@ class JuiceboxFormatter implements JuiceboxFormatterInterface, TrustedCallbackIn
    * drupal settings data and merges them into the gallery. Note that this only
    * accounts for common settings.
    *
-   * @param Drupal\juicebox\JuiceboxGalleryInterface $gallery
+   * @param JuiceboxGalleryInterface $gallery
    *   An initialized Juicebox gallery object.
    * @param array $settings
    *   An associative array of gallery-specific settings.
@@ -456,7 +456,7 @@ class JuiceboxFormatter implements JuiceboxFormatterInterface, TrustedCallbackIn
           // values.
           $matches = [];
           preg_match('/^([A-Za-z0-9]+?)="([^"]+?)"$/u', $option, $matches);
-          list(, $name, $value) = $matches;
+          [, $name, $value] = $matches;
           $gallery->addOption(mb_strtolower($name), Html::escape($value));
         }
       }
@@ -466,7 +466,7 @@ class JuiceboxFormatter implements JuiceboxFormatterInterface, TrustedCallbackIn
   /**
    * {@inheritdoc}
    */
-  public function confBaseOptions() {
+  public function confBaseOptions(): array {
     return [
       'jlib_galleryWidth' => '100%',
       'jlib_galleryHeight' => '100%',
@@ -490,7 +490,7 @@ class JuiceboxFormatter implements JuiceboxFormatterInterface, TrustedCallbackIn
   /**
    * {@inheritdoc}
    */
-  public function confBaseForm(array $form, array $settings) {
+  public function confBaseForm(array $form, array $settings): array {
     // Get locally installed library details.
     $library = $this->getLibrary();
     $disallowed_conf = [];
@@ -500,7 +500,7 @@ class JuiceboxFormatter implements JuiceboxFormatterInterface, TrustedCallbackIn
       if (empty($library['version'])) {
         $notification_top = $this->t('<strong>Notice:</strong> Your Juicebox Library version could not be detected. Some options below may not function correctly.');
       }
-      // If this version does not support some LITE optins, show a message.
+      // If this version does not support some LITE options, show a message.
       elseif (!empty($library['disallowed_conf'])) {
         $disallowed_conf = $library['disallowed_conf'];
         $notification_top = $this->t('<strong>Notice:</strong> You are currently using Juicebox library version <strong>@version</strong> which is not compatible with some of the options listed below. These options will appear disabled until you upgrade to the most recent Juicebox library version.', ['@version' => $library['version']]);
@@ -594,7 +594,7 @@ class JuiceboxFormatter implements JuiceboxFormatterInterface, TrustedCallbackIn
       '#jb_fieldset' => 'juicebox_manual_config',
       '#type' => 'textarea',
       '#title' => $this->t('Pro / Manual Configuraton Options'),
-      '#description' => $this->t('Add one option per line in the format <strong>optionName="optionValue"</strong><br/>See also: http://www.juicebox.net/support/config_options'),
+      '#description' => $this->t('Add one option per line in the format <strong>optionName="optionValue"</strong><br/>See also: https://www.juicebox.net/support/config_options'),
       '#element_validate' => ['juicebox_element_validate_config'],
     ];
     $form['advanced'] = [
@@ -609,8 +609,8 @@ class JuiceboxFormatter implements JuiceboxFormatterInterface, TrustedCallbackIn
       '#title' => $this->t('Incompatible File Type Handling'),
       '#options' => [
         'skip' => $this->t('Bypass incompatible files'),
-        'show_icon' => $this->t('Show mimetype icon placehoder'),
-        'show_icon_and_link' => $this->t('Show mimetype icon placholder and link to file'),
+        'show_icon' => $this->t('Show mimetype icon placeholder'),
+        'show_icon_and_link' => $this->t('Show mimetype icon placeholder and link to file'),
       ],
       '#empty_option' => $this->t('Do nothing'),
       '#description' => $this->t('Specify any special handling that should be applied to files that Juicebox cannot display (non-images).'),
@@ -646,7 +646,9 @@ class JuiceboxFormatter implements JuiceboxFormatterInterface, TrustedCallbackIn
       if (!empty($conf_value['#type']) && $conf_value['#type'] != 'details') {
         $conf_value['#default_value'] = $settings[$conf_key];
         if (in_array($conf_key, $disallowed_conf)) {
-          $conf_value['#title'] .= $notification_label;
+          if(isset($notification_label)){
+             $conf_value['#title'] .= $notification_label;}
+          else { $conf_value['#title'] .= '';}
           $conf_value['#disabled'] = TRUE;
         }
       }
@@ -660,7 +662,7 @@ class JuiceboxFormatter implements JuiceboxFormatterInterface, TrustedCallbackIn
   /**
    * {@inheritdoc}
    */
-  public function confBaseStylePresets($allow_multisize = TRUE) {
+  public function confBaseStylePresets($allow_multisize = TRUE): array {
     $library = $this->getLibrary();
     // Get available image style presets.
     $presets = image_style_options(FALSE);
