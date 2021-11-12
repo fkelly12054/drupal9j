@@ -3,7 +3,7 @@
 namespace Drupal\juicebox;
 
 use Drupal\Core\Messenger\MessengerInterface;
-use Exception;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -29,56 +29,56 @@ class JuiceboxFormatter implements JuiceboxFormatterInterface, TrustedCallbackIn
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
-  protected $configFactory;
+  protected ConfigFactoryInterface $configFactory;
 
   /**
    * A Drupal URL generator service.
    *
    * @var \Drupal\Core\Routing\UrlGeneratorInterface
    */
-  protected $urlGenerator;
+  protected UrlGeneratorInterface $urlGenerator;
 
   /**
    * A Drupal module manager service.
    *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
-  protected $moduleManager;
+  protected ModuleHandlerInterface $moduleManager;
 
   /**
    * A Drupal current path service.
    *
    * @var \Drupal\Core\Path\CurrentPathStack
    */
-  protected $currentPathStack;
+  protected CurrentPathStack $currentPathStack;
 
   /**
    * A Symfony request object for the current request.
    *
    * @var \Symfony\Component\HttpFoundation\Request
    */
-  protected $request;
+  protected Request $request;
 
   /**
    * Storage of library details as defined by Libraries API.
    *
    * @var array
    */
-  static protected $library = [];
+  static protected array $library = [];
 
   /**
    * The messenger service.
    *
-   * @var MessengerInterface
+   * @var \Drupal\Core\Messenger\MessengerInterface
    */
-  protected $messenger;
+  protected MessengerInterface $messenger;
 
   /**
    * A Drupal entity type manager service.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * Constructor.
@@ -96,7 +96,7 @@ class JuiceboxFormatter implements JuiceboxFormatterInterface, TrustedCallbackIn
    *   A current path service.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The Symfony request stack from which to extract the current request.
-   * @param MessengerInterface $messenger_interface
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger_interface
    *   The messenger interface.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager service.
@@ -182,7 +182,7 @@ class JuiceboxFormatter implements JuiceboxFormatterInterface, TrustedCallbackIn
     if ($gallery instanceof JuiceboxGalleryInterface) {
       return $gallery;
     }
-    throw new Exception('Could not instantiate Juicebox gallery.');
+    throw new \Exception('Could not instantiate Juicebox gallery.');
   }
 
   /**
@@ -646,9 +646,12 @@ class JuiceboxFormatter implements JuiceboxFormatterInterface, TrustedCallbackIn
       if (!empty($conf_value['#type']) && $conf_value['#type'] != 'details') {
         $conf_value['#default_value'] = $settings[$conf_key];
         if (in_array($conf_key, $disallowed_conf)) {
-          if(isset($notification_label)){
-             $conf_value['#title'] .= $notification_label;}
-          else { $conf_value['#title'] .= '';}
+          if (isset($notification_label)) {
+            $conf_value['#title'] .= $notification_label;
+          }
+          else {
+            $conf_value['#title'] .= '';
+          }
           $conf_value['#disabled'] = TRUE;
         }
       }

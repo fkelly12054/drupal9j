@@ -17,6 +17,13 @@ namespace Drupal\Tests\juicebox\Functional {
     use TestFileCreationTrait;
 
     /**
+     * Default theme.
+     *
+     * @var mixed
+     */
+    protected mixed $defaultTheme = 'stark';
+
+    /**
      * Common variables.
      *
      * @var mixed
@@ -52,11 +59,6 @@ namespace Drupal\Tests\juicebox\Functional {
     protected string $instFieldType = 'image';
 
     /**
-     * {@inheritdoc}
-     */
-    protected mixed $defaultTheme = 'stark';
-
-    /**
      * Set up a new content type, with an image/file field.
      */
     protected function initNode() {
@@ -79,7 +81,8 @@ namespace Drupal\Tests\juicebox\Functional {
         'cardinality' => FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED,
       ];
       // entity_create('field_storage_config', $field_storage)->save();
-      Drupal::entityTypeManager()->getStorage('field_storage_config')->create($field_storage)->save();
+      Drupal::entityTypeManager()->getStorage('field_storage_config')
+        ->create($field_storage)->save();
       // Prep a field instance.
       $field_settings = [];
       if ($this->instFieldType == 'image') {
@@ -193,7 +196,8 @@ namespace Drupal\Tests\juicebox\Functional {
      * @param array $ids
      *   An array of contextual link ids.
      * @param string $current_path
-     *   The Drupal path for the page for which the contextual links are rendered.
+     *   The Drupal path for the page for which the contextual links are
+     *   rendered.
      *
      * @return string
      *   The response body.
@@ -204,17 +208,6 @@ namespace Drupal\Tests\juicebox\Functional {
         $post['ids[' . $i . ']'] = $ids[$i];
       }
       return $this->drupalPost('contextual/render', 'application/json', $post, ['query' => ['destination' => $current_path]]);
-    }
-
-    /**
-     * Suggested by PHPStorm.
-     *
-     * @param string $string
-     * @param string $string1
-     * @param array $post
-     * @param array $array
-     */
-    private function drupalPost(string $string, string $string1, array $post, array $array) {
     }
 
   }

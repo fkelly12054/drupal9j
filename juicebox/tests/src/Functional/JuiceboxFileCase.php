@@ -21,6 +21,11 @@ class JuiceboxFileCase extends JuiceboxCaseTestBase {
   protected static $modules = ['node', 'field_ui', 'image', 'juicebox'];
 
   /**
+   * {@inheritdoc}
+   */
+  protected mixed $defaultTheme = 'stark';
+
+  /**
    * The field name.
    *
    * @var string
@@ -33,11 +38,6 @@ class JuiceboxFileCase extends JuiceboxCaseTestBase {
    * @var string
    */
   public string $instFieldType = 'file';
-
-  /**
-   * {@inheritdoc}
-   */
-  protected mixed $defaultTheme = 'stark';
 
   /**
    * Define setup tasks.

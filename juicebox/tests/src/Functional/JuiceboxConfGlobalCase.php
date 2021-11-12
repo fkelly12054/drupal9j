@@ -20,10 +20,10 @@ class JuiceboxConfGlobalCase extends JuiceboxCaseTestBase {
    */
 
   protected static $modules = ['node', 'field_ui', 'image', 'juicebox'];
+
   /**
    * {@inheritdoc}
    */
-
   protected mixed $defaultTheme = 'stark';
 
   /**

@@ -84,10 +84,10 @@ class JuiceboxSubRequestCase extends JuiceboxCaseTestBase {
   // list above, to use the "standard" profile's article type for this test
   // instead of the one we create manually (should also work, but will be slow).
   // protected $profile = 'standard';.
+
   /**
    * Test gallery embedded in a view row that is dependent on Juicebox cache.
    */
-
   public function testSubRequestDependent() {
     $node = $this->node;
     $xml_path = 'juicebox/xml/field/node/' . $node->id() . '/' . $this->instFieldName . '/_custom';
