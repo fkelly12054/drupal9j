@@ -20,6 +20,11 @@ namespace Drupal\Tests\juicebox\Functional {
     public static $modules = ['node', 'field_ui', 'image', 'juicebox'];
 
     /**
+     * {@inheritdoc}
+     */
+    protected mixed $defaultTheme = 'stark';
+
+    /**
      * Define setup tasks.
      */
     protected function setUp() {

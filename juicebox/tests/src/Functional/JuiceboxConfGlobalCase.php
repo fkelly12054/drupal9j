@@ -18,7 +18,13 @@ class JuiceboxConfGlobalCase extends JuiceboxCaseTestBase {
    *
    * @var array
    */
+
   protected static $modules = ['node', 'field_ui', 'image', 'juicebox'];
+  /**
+   * {@inheritdoc}
+   */
+
+  protected mixed $defaultTheme = 'stark';
 
   /**
    * Define setup tasks.

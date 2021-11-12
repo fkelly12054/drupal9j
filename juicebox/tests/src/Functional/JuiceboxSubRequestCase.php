@@ -40,6 +40,11 @@ class JuiceboxSubRequestCase extends JuiceboxCaseTestBase {
   ];
 
   /**
+   * {@inheritdoc}
+   */
+  protected mixed $defaultTheme = 'stark';
+
+  /**
    * Define setup tasks.
    */
   public function setUp(): void {

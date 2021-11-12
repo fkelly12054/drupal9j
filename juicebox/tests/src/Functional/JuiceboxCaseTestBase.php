@@ -52,6 +52,11 @@ namespace Drupal\Tests\juicebox\Functional {
     protected string $instFieldType = 'image';
 
     /**
+     * {@inheritdoc}
+     */
+    protected mixed $defaultTheme = 'stark';
+
+    /**
      * Set up a new content type, with an image/file field.
      */
     protected function initNode() {

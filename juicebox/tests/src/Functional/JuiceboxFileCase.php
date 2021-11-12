@@ -37,7 +37,7 @@ class JuiceboxFileCase extends JuiceboxCaseTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'stark';
+  protected mixed $defaultTheme = 'stark';
 
   /**
    * Define setup tasks.

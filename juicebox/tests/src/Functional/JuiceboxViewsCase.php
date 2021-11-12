@@ -37,7 +37,10 @@ class JuiceboxViewsCase extends JuiceboxCaseTestBase {
    * @var string
    */
   protected string $instBundle = 'article';
-
+  /**
+   * {@inheritdoc}
+   */
+  protected mixed $defaultTheme = 'stark';
   /**
    * Field name.
    *
